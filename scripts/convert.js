@@ -1,5 +1,6 @@
 const fs = require('fs');
 
+// mapping to convert category to parameter.
 const CATEGORY_TO_PARAMETER = {
     'carbon_dioxide_co2_emissions_without_land_use_land_use_change_and_forestry_lulucf_in_kilotonne_co2_equivalent': 'CO2',
     'greenhouse_gas_ghgs_emissions_including_indirect_co2_without_lulucf_in_kilotonne_co2_equivalent': 'GHG + CO2',
@@ -16,6 +17,34 @@ const CATEGORY_TO_PARAMETER = {
 const csv = fs.readFileSync('greenhouse_gas_inventory_data_data.csv');
 const rows = csv.toString().split('\n');
 
+/**
+ * Cleaning and restructuring the data in .csv file, temporarily saving it in object `result`,
+ * before writing the object data in `data.json` file.
+ *
+ * The `result` object will be in the following form:
+ * {
+ *      'country1': {
+ *          'parameter1': [[year1, value1], [year2, value2], ..., [yearN1, valueN1]],
+ *          'parameter2': [[year1, value1], [year2, value2], ..., [yearN2, valueN2]],
+ *          ...
+ *          'parameterM': [[year1, value1], [year2, value2], ..., [yearNM, valueNM]]
+ *      },
+ *      'country2': {
+ *          'parameter1': [[year1, value1], [year2, value2], ..., [yearN1, valueN1]],
+ *          'parameter2': [[year1, value1], [year2, value2], ..., [yearN2, valueN2]],
+ *          ...
+ *          'parameterM': [[year1, value1], [year2, value2], ..., [yearNM, valueNM]],
+ *      }
+ *      ...
+ *      ...
+ *      ...
+ *      'countryX': {
+ *          'parameter1': [[year1, value1], [year2, value2], ..., [yearN1, valueN1]],
+ *          'parameter2': [[year1, value1], [year2, value2], ..., [yearN2, valueN2]],
+ *          ...
+ *          'parameterM': [[year1, value1], [year2, value2], ..., [yearNM, valueNM]],
+ *      }
+ */
 const result = {};
 for (let i = 1; i < rows.length - 1; ++i) {
     const row = rows[i].split(',');

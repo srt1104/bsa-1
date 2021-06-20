@@ -11,8 +11,10 @@ const LineChart = props => {
 	} = props;
 
     const data = useMemo(
+        // for the resultant array, include only those objects whose parameters are checked
         () => parametersSelected.map(parameter => ({
             label: parameter,
+            // include only those datapoints whose `year` falls between `startingFrom` and `endingAt`
             data: inputData[countrySelected][parameter].filter(([ year, value ]) => {
 				return startingFrom <= year && year <= endingAt;
 			})

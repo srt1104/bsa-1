@@ -17,18 +17,22 @@ class App extends Component {
             endingAt,
             parametersSelected: parametersSelected || [],
             inputData: {},
-            lowestYear: 0,
-            highestYear: 0
+            lowestYear: startingFrom,
+            highestYear: endingAt
         };
     }
 
     componentDidMount() {
+        // fetch data from `data.json` file saved on the frontend,
+        // and save the data in component state.
         fetch('data.json')
         .then(response => response.json())
         .then(jsonData => {
             let lowestYear = new Date().getFullYear();
             let highestYear = 0;
 
+            // find and set the lowest year and highest year in data,
+            // used for time period filter.
             for (const country in jsonData)
                 for (const parameter in jsonData[country])
                     for (const [ year, value ] of jsonData[country][parameter]) {
@@ -48,6 +52,8 @@ class App extends Component {
         });
     }
 
+    // everytime the state updates, encode it in url form and append it to origin.
+    // this url can be used as a bookmark for later use.
     componentDidUpdate() {
         const { countrySelected, startingFrom, endingAt, parametersSelected } = this.state;
         const params = { countrySelected, startingFrom, endingAt, parametersSelected };
@@ -61,10 +67,13 @@ class App extends Component {
             if (!country)
                 return { countrySelected: '', parametersSelected: [] };
 
+            // if there are any common parameters between selected country and new country,
+            // and which have been already selected (saved in `this.state.parametersSelected`),
+            // keep them in the new `parametersSelected` array.
             const newParameters = Object.keys(prevState.inputData[country]);
             const parametersSelected = prevState.parametersSelected.filter(parameter => {
                 return newParameters.includes(parameter);
-            })
+            });
 
             return {
                 countrySelected: country,
@@ -85,10 +94,12 @@ class App extends Component {
         this.setState(({ parametersSelected: prevParametersSelected }) => {
             const checked = prevParametersSelected.includes(parameter);
 
+            // if the parameter was unchecked, add it to `parametersSelected` array
             if (!checked)
                 return {
                     parametersSelected: [ ...prevParametersSelected, parameter ]
                 };
+            // else remove it from `parametersSelected` array
             else
                 return {
                     parametersSelected: prevParametersSelected.filter(prevParameter => prevParameter !== parameter)
@@ -107,6 +118,8 @@ class App extends Component {
             highestYear
         } = this.state;
 
+        // this check is needed as line map bugs out (doesn't show axis names and labels)
+        // if empty `inputData` is passed as props
         const dataFetched = Object.keys(inputData).length > 0;
 
         return (
