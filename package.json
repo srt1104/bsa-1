@@ -4,7 +4,7 @@
   "description": "Blue Sky Analytics assignment-1",
   "main": "index.js",
   "scripts": {
-    "start": "webpack && node ./server/server.js",
+    "start": "node ./server/server.js",
     "build": "webpack",
     "dev-server": "webpack serve",
     "heroku-postbuild": "yarn run build"
