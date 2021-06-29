@@ -18,3 +18,7 @@ Compiles and bundles up all .js files into public/bundle.js.
 
 Takes the public/bundle.js and serves it using simple express app.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+
+## Heroku livelink
+
+You can access the project performing live on Heroku at [https://bsa-1.herokuapp.com/](https://bsa-1.herokuapp.com/)
